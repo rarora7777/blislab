@@ -1,4 +1,8 @@
-ifeq ($(BLISLAB_USE_INTEL),true)
+ifeq ($(BLISLAB_COMPILER),clang)
+include $(BLISLAB_DIR)/make.inc.files/make.clang.inc
+else ifeq ($(BLISLAB_COMPILER),intel)
+include $(BLISLAB_DIR)/make.inc.files/make.intel.inc
+else ifeq ($(BLISLAB_USE_INTEL),true)
 include $(BLISLAB_DIR)/make.inc.files/make.intel.inc
 else
 include $(BLISLAB_DIR)/make.inc.files/make.gnu.inc
@@ -33,7 +37,7 @@ $(LIBBLISLAB): $(BLISLAB_OBJ)
 	$(RANLIB) $@
 
 $(SHAREDLIBBLISLAB): $(BLISLAB_OBJ)
-	$(CC) $(CFLAGS) -shared -o $@ $(BLISLAB_OBJ) $(LDLIBS)
+	$(CC) $(CFLAGS) -shared -o $@ $(BLISLAB_OBJ) $(filter-out $(LIBBLISLAB),$(LDLIBS))
 
 # ---------------------------------------------------------------------------
 # Object files compiling rules
@@ -48,4 +52,3 @@ $(SHAREDLIBBLISLAB): $(BLISLAB_OBJ)
 clean:
 	-rm $(BLISLAB_OBJ) $(LIBBLISLAB) $(SHAREDLIBBLISLAB) dgemm/*~ kernels/*~ kernels/*.o test/*~ include/*~ *~ make.inc.files/*~
 	$(MAKE) clean -C test
-

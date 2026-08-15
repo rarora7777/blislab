@@ -27,6 +27,7 @@ BLISlab: A Sandbox for Optimizing GEMM
 ├── lib
 ├── make.inc.files
 │   ├── make.gnu.inc
+│   ├── make.clang.inc
 │   ├── make.inc
 │   └── make.intel.inc
 └── test
@@ -36,11 +37,11 @@ BLISlab: A Sandbox for Optimizing GEMM
     └── test_bl_dgemm.c
 
 How to compile and execute the code:
-1. Change the options in sourceme.sh and set the environment variables.
+1. Change the options in sourceme.sh and set the environment variables. Set
+   `BLISLAB_COMPILER` to `clang`, `gnu`, or `intel` as appropriate.
 $ source sourceme.sh
 2. Compile the code, generate the library and test executables.
 $ make
 3. Execute the test driver.
 $ cd test
 $ ./run_bl_dgemm.sh
-

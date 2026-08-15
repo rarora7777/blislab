@@ -1,6 +1,10 @@
 export BLISLAB_DIR=..
 
-ifeq ($(BLISLAB_USE_INTEL),true)
+ifeq ($(BLISLAB_COMPILER),clang)
+include $(BLISLAB_DIR)/make.inc.files/make.clang.inc
+else ifeq ($(BLISLAB_COMPILER),intel)
+include $(BLISLAB_DIR)/make.inc.files/make.intel.inc
+else ifeq ($(BLISLAB_USE_INTEL),true)
 include $(BLISLAB_DIR)/make.inc.files/make.intel.inc
 else
 include $(BLISLAB_DIR)/make.inc.files/make.gnu.inc

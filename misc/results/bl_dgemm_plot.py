@@ -27,7 +27,7 @@ RESULTS = {
 }
 
 
-def plot_results(result: np.ndarray, peak_perf: float = PEAK_PERF) -> plt.Figure:
+def plot_results(result: np.ndarray, peak_perf: float = PEAK_PERF) -> plt.Figure: # pyright: ignore[reportPrivateImportUsage]
     """Return a figure matching the original MATLAB DGEMM plot."""
     fig, ax = plt.subplots(figsize=(4, 4))
     ax.plot(result[:, 0], result[:, 3], ".-", linewidth=2, color=(0, 0.2, 1.0), label="my_dgemm_st")

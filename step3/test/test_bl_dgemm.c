@@ -45,6 +45,7 @@
 
 
 #include "bl_dgemm.h"
+#include <time.h>
 
 #define USE_SET_DIFF 1
 #define TOLERANCE 1E-10
@@ -206,4 +207,3 @@ int main( int argc, char *argv[] )
 
     return 0;
 }
-

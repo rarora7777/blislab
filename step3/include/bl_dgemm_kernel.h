@@ -50,7 +50,9 @@
 #include "bl_config.h"
 
 #include <stdio.h>
+#if defined(__i386__) || defined(__x86_64__)
 #include <immintrin.h> // AVX
+#endif
 
 
 // Allow C++ users to include this header file in their source code. However,
@@ -63,14 +65,18 @@ extern "C" {
 typedef unsigned long long dim_t;
 
 typedef union {
+#if defined(__i386__) || defined(__x86_64__)
     __m256d v;
     __m256i u;
+#endif
     double d[ 4 ];
 } v4df_t;
 
 
 typedef union {
+#if defined(__i386__) || defined(__x86_64__)
     __m128i v;
+#endif
     int d[ 4 ];
 } v4li_t;
 
@@ -157,4 +163,3 @@ static void (*bl_micro_kernel) (
 #endif
 
 #endif
-

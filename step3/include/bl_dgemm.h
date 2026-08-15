@@ -55,7 +55,9 @@ extern "C" {
 #endif
 
 #include <math.h>
+#if defined(__i386__) || defined(__x86_64__)
 #include <immintrin.h>
+#endif
 
 
 #include <stdio.h>
@@ -149,4 +151,3 @@ void bl_get_range( int n, int bf, int* start, int* end );
 #endif
 
 #endif
-
