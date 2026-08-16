@@ -66,12 +66,13 @@ void bl_dgemm(
         return;
     }
 
-    // Pointers and loop unrolling make performance on 512x512 go up from ~1.25 to ~2.25 GFlops with -O0
+    // Pointers and loop unrolling make performance on 512x512 go up from ~1.25 to ~3.1 GFlops with -O0
+    // With unroll size 4 and 8, performance is ~2.25 and ~2.7 GFlops
     for (j = 0; j < n; j++)
     { // Start 2-nd loop
         for (p = 0; p < k; p++)
         { // Start 1-st loop
-            for (i = 0; i < m; i+=4)
+            for (i = 0; i < m; i+=16)
             { // Start 0-th loop
                 // C[ j * ldc + i ] += A[ p * lda + i ] * B[ j * ldb + p ];
                 double* cp = &C(i, j);
@@ -81,6 +82,18 @@ void bl_dgemm(
                 *(cp+1) += *(ap+1) * *bp;
                 *(cp+2) += *(ap+2) * *bp;
                 *(cp+3) += *(ap+3) * *bp;
+                *(cp+4) += *(ap+4) * *bp;
+                *(cp+5) += *(ap+5) * *bp;
+                *(cp+6) += *(ap+6) * *bp;
+                *(cp+7) += *(ap+7) * *bp;
+                *(cp+8) += *(ap+8) * *bp;
+                *(cp+9) += *(ap+9) * *bp;
+                *(cp+10) += *(ap+10) * *bp;
+                *(cp+11) += *(ap+11) * *bp;
+                *(cp+12) += *(ap+12) * *bp;
+                *(cp+13) += *(ap+13) * *bp;
+                *(cp+14) += *(ap+14) * *bp;
+                *(cp+15) += *(ap+15) * *bp;
                 // C(i, j) += A(i, p) * B(p, j); // Each operand is a MACRO defined in bl_dgemm() function.
 
             } // End   0-th loop
