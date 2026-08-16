@@ -48,7 +48,7 @@
 void AddDot(int k, double *A, int lda, double *B, int ldb, double *result)
 {
   int p;
-  register double val = *result;
+  double val = *result;
   for (p = 0; p < k; p += 8)
   {
     val += A(0, p) * B(p, 0);

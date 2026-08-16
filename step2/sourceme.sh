@@ -11,7 +11,7 @@ export BLISLAB_USE_BLAS=true
 echo "BLISLAB_USE_BLAS = $BLISLAB_USE_BLAS"
 
 # Optimization Level (O0, O1, O2, O3)
-export COMPILER_OPT_LEVEL=O3
+export COMPILER_OPT_LEVEL=O0
 echo "COMPILER_OPT_LEVEL = $COMPILER_OPT_LEVEL"
 
 # BLAS installation prefix. Homebrew OpenBLAS installs headers in include/ and
