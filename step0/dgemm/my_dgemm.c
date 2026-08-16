@@ -66,6 +66,7 @@ void bl_dgemm(
         return;
     }
 
+    // Pointers and loop unrolling make performance on 512x512 go up from ~1.25 to ~2.25 GFlops with -O0
     for (j = 0; j < n; j++)
     { // Start 2-nd loop
         for (p = 0; p < k; p++)
