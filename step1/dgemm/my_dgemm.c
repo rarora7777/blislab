@@ -1,6 +1,6 @@
 /*
  * --------------------------------------------------------------------------
- * BLISLAB 
+ * BLISLAB
  * --------------------------------------------------------------------------
  * Copyright (C) 2016, The University of Texas at Austin
  *
@@ -40,62 +40,69 @@
  *
  * Modification:
  *
- * 
+ *
  * */
- 
 
 #include "bl_dgemm.h"
 
-void AddDot( int k, double *A, int lda, double *B, int ldb, double *result ) {
+void AddDot(int k, double *A, int lda, double *B, int ldb, double *result)
+{
   int p;
-  for ( p = 0; p < k; p++ ) {
-    *result += A( 0, p ) * B( p, 0 );
+  register double val = *result;
+  for (p = 0; p < k; p += 8)
+  {
+    val += A(0, p) * B(p, 0);
+    val += A(0, p + 1) * B(p + 1, 0);
+    val += A(0, p + 2) * B(p + 2, 0);
+    val += A(0, p + 3) * B(p + 3, 0);
+    val += A(0, p + 4) * B(p + 4, 0);
+    val += A(0, p + 5) * B(p + 5, 0);
+    val += A(0, p + 6) * B(p + 6, 0);
+    val += A(0, p + 7) * B(p + 7, 0);
   }
+  *result = val;
 }
 
-
-void AddDot_MRxNR( int k, double *A, int lda, double *B, int ldb, double *C, int ldc )
+void AddDot_MRxNR(int k, double *A, int lda, double *B, int ldb, double *C, int ldc)
 {
   int ir, jr;
   int p;
-  for ( jr = 0; jr < DGEMM_NR; jr++ ) {
-    for ( ir = 0; ir < DGEMM_MR; ir++ ) {
-
-      AddDot( k, &A( ir, 0 ), lda, &B( 0, jr ), ldb, &C( ir, jr ) );
-
+  for (jr = 0; jr < DGEMM_NR; jr++)
+  {
+    for (ir = 0; ir < DGEMM_MR; ir++)
+    {
+      AddDot(k, &A(ir, 0), lda, &B(0, jr), ldb, &C(ir, jr));
     }
   }
 }
 
 void bl_dgemm(
-    int    m,
-    int    n,
-    int    k,
+    int m,
+    int n,
+    int k,
     double *A,
-    int    lda,
+    int lda,
     double *B,
-    int    ldb,
-    double *C,        // must be aligned
-    int    ldc        // ldc must also be aligned
+    int ldb,
+    double *C, // must be aligned
+    int ldc    // ldc must also be aligned
 )
 {
-    int    i, j, p;
-    int    ir, jr;
+  int i, j, p;
+  int ir, jr;
 
-    // Early return if possible
-    if ( m == 0 || n == 0 || k == 0 ) {
-        printf( "bl_dgemm(): early return\n" );
-        return;
-    }
+  // Early return if possible
+  if (m == 0 || n == 0 || k == 0)
+  {
+    printf("bl_dgemm(): early return\n");
+    return;
+  }
 
-    for ( j = 0; j < n; j += DGEMM_NR ) {          // Start 2-nd loop
-        for ( i = 0; i < m; i += DGEMM_MR ) {      // Start 1-st loop
-
-            AddDot_MRxNR( k, &A( i, 0 ), lda, &B( 0, j ), ldb, &C( i, j ), ldc );
-
-        }                                          // End   1-st loop
-    }                                              // End   2-nd loop
-
+  for (j = 0; j < n; j += DGEMM_NR)
+  { // Start 2-nd loop
+    for (i = 0; i < m; i += DGEMM_MR)
+    { // Start 1-st loop
+      AddDot_MRxNR(k, &A(i, 0), lda, &B(0, j), ldb, &C(i, j), ldc);
+    } // End   1-st loop
+  } // End   2-nd loop
 }
-
-
